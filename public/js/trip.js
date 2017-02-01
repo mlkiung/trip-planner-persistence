@@ -19,8 +19,8 @@ var tripModule = (function () {
 
   // application state
 
-  var days = [],
-      currentDay;
+  var days = [];
+  var currentDay;
 
   // jQuery selections
 
@@ -51,14 +51,22 @@ var tripModule = (function () {
   // ~~~~~~~~~~~~~~~~~~~~~~~
     // `addDay` may need to take information now that we can persist days -- we want to display what is being sent from the DB
   // ~~~~~~~~~~~~~~~~~~~~~~~
-  function addDay () { 
+  function addDay () {
     if (this && this.blur) this.blur(); // removes focus box from buttons
-    var newDay = dayModule.create({ number: days.length + 1 }); // dayModule
-    days.push(newDay);
-    if (days.length === 1) {
-      currentDay = newDay;
-    }
-    switchTo(newDay);
+    //here we need to make an ajax request to MAKE a day. Return it.
+    $.post('/api/days?day='+ days.length + 1)
+      .then(function(createdDay){
+        var newDay = dayModule.create(createdDay)
+        days.push(newDay);
+        if (days.length === 1) {
+          currentDay = newDay;
+        }
+        switchTo(newDay);
+      })
+    //ENHANCE said day.
+    //PUSH enhanced day into days array
+
+    //var newDay = dayModule.create({ number: days.length + 1 }); // dayModule
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~

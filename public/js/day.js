@@ -28,8 +28,8 @@ var dayModule = (function () {
   // ~~~~~~~~~~~~~~~~~~~~~~~
   function Day (data) {
     // for brand-new days
-    this.number = 0;
-    this.hotel = null;
+    this.number = data.day;
+    this.hotel = data.hotelId;
     this.restaurants = [];
     this.activities = [];
     // for days based on existing data

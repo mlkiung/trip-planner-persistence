@@ -15,15 +15,26 @@ router.get('/', (req, res, next) => {
 });
 //get one day
 router.get('/:num', (req, res, next) => {
+  var num = +req.params.num
   Day.findOne({
     where: {
-      day: req.params.num
+      day: num
     }
   }).then(function (day) {
     res.json(day);
   }).catch(next);
 });
 //update
+router.post('/', (req, res, next) => {
+  Day.create({
+    day: req.query.day
+  })
+    .then(function (day) {
+      res.json(day);
+    })
+    .catch(next);
+});
+
 router.post('/:num/restaurants', (req, res, next) => {
 
 
@@ -38,15 +49,6 @@ router.post('/:num/activities', (req, res, next) => {
 });
 
 //creating a day
-router.post('/', (req, res, next) => {
-  Day.create({
-    day: req.query.day
-  })
-    .then(function (day) {
-      res.json(day);
-    })
-    .catch(next);
-});
 
 //delete
 router.delete('/:num', function (req, res, next) {
