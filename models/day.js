@@ -5,7 +5,7 @@ var Restaurant = db.models.restaurant;
 var Activity = db.models.activity;
 
 var Day = db.define('day', {
-  number: {
+  day: {
     type: Sequelize.INTEGER
   }
 })
