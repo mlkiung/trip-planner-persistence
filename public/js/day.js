@@ -100,7 +100,7 @@ var dayModule = (function () {
     // adding to the day object, and saving to db
     switch (attraction.type) {
       case 'hotel':
-        if (this.hotel) this.hotel.hide();  
+        if (this.hotel) this.hotel.hide();
         $.post('/api/days/' + this.number + '/hotels/' + attraction.id)
           .then(function (result) {
             this.hotel = attraction;
@@ -127,14 +127,23 @@ var dayModule = (function () {
     // removing from the day object
     switch (attraction.type) {
       case 'hotel':
-        this.hotel = null;
-        $.post('/api/days/' + this.number + '/hotels/remove/' + attraction.id);
+        $.post('/api/days/' + this.number + '/hotels/remove/' + attraction.id)
+          .then(function(result){
+            this.hotel = null;
+          }).catch(console.error);
         break;
       case 'restaurant':
-        utilsModule.remove(this.restaurants, attraction);
+        $.post('/api/days/' + this.number + '/restaurants/remove/' + attraction.id)
+          .then(function(result){
+            utilsModule.remove(this.restaurants, attraction);
+          }).catch(console.error)
         break;
       case 'activity':
-        utilsModule.remove(this.activities, attraction);
+       $.post('/api/days/' + this.number + '/activities/remove/' + attraction.id)
+          .then(function(result){
+            utilsModule.remove(this.activities, attraction);
+          }).catch(console.error)
+
         break;
       default: console.error('bad type:', attraction);
     }

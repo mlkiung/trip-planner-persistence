@@ -50,6 +50,44 @@ router.post('/:num/hotels/remove/:id', (req, res, next) => {
 
 });
 
+router.post('/:num/restaurants/remove/:id', (req, res, next) => {
+  Day.findOne({
+    where: { number: req.params.num }
+  }).then(function (day) {
+    return Day_Restaurant.findOne({
+      where: {
+        dayId: day.id,
+        restaurantId: req.params.id
+      }
+    })
+  }).then(function(rowInstance) {
+    return rowInstance.destroy();
+  }).then((result) => {
+    res.sendStatus(200)
+  })
+  .catch(next);
+
+});
+
+router.post('/:num/activities/remove/:id', (req, res, next) => {
+  Day.findOne({
+    where: { number: req.params.num }
+  }).then(function (day) {
+    return Day_Activity.findOne({
+      where: {
+        dayId: day.id,
+        activityId: req.params.id
+      }
+    })
+  }).then(function(rowInstance) {
+    return rowInstance.destroy();
+  }).then((result) => {
+    res.sendStatus(200)
+  })
+  .catch(next);
+
+});
+
 //update
 router.post('/:num/restaurants/:id', (req, res, next) => {
   Day.findOne({
