@@ -54,7 +54,8 @@ var tripModule = (function () {
   function addDay () {
     if (this && this.blur) this.blur(); // removes focus box from buttons
     //here we need to make an ajax request to MAKE a day. Return it.
-    $.post('/api/days?day='+ days.length + 1)
+    $.post('/api/days?day='+(days.length + 1))
+
       .then(function(createdDay){
         var newDay = dayModule.create(createdDay)
         days.push(newDay);
@@ -62,9 +63,8 @@ var tripModule = (function () {
           currentDay = newDay;
         }
         switchTo(newDay);
-      })
-    //ENHANCE said day.
-    //PUSH enhanced day into days array
+      }).catch(console.error)
+
 
     //var newDay = dayModule.create({ number: days.length + 1 }); // dayModule
   }
@@ -79,12 +79,19 @@ var tripModule = (function () {
     var index = days.indexOf(currentDay),
       previousDay = days.splice(index, 1)[0],
       newCurrent = days[index] || days[index - 1];
-    // fix the remaining day numbers
-    days.forEach(function (day, i) {
-      day.setNumber(i + 1);
-    });
-    switchTo(newCurrent);
-    previousDay.hideButton();
+    //remove the deleted day from the DB
+    $.ajax({
+      url:'/api/days/'+(index+1),
+      type: 'DELETE'
+    }).then(function(results){
+      // fix the remaining day numbers
+      console.log('deleted!',results)
+      days.forEach(function (day, i) {
+        day.setNumber(i + 1);
+      })
+      switchTo(newCurrent);
+      previousDay.hideButton();
+    }).catch(console.error)
   }
 
   // globally accessible module methods
@@ -93,10 +100,16 @@ var tripModule = (function () {
 
     load: function () {
 
-      // ~~~~~~~~~~~~~~~~~~~~~~~
-        //If we are trying to load existing Days, then let's make a request to the server for the day. Remember this is async. For each day we get back what do we need to do to it?
-      // ~~~~~~~~~~~~~~~~~~~~~~~
-      $(addDay);
+      $.get('/api/days')
+        .then(function(databaseDays){
+          if(!databaseDays.length){
+            $(addDay)
+          }else{
+            days = dayModule.loadEnhancedDays(databaseDays)
+            switchTo(days[0])
+          }
+        }).catch(console.error)
+
     },
 
     switchTo: switchTo,

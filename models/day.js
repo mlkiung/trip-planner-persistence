@@ -5,8 +5,19 @@ var Restaurant = db.models.restaurant;
 var Activity = db.models.activity;
 
 var Day = db.define('day', {
-  day: {
+  number: {
     type: Sequelize.INTEGER
+  }
+}, {
+  classMethods: {
+    findAndSort: function(){
+       return Day.findAll().then(function(days){
+        days = days.sort(function(a,b){
+          return a.number>b.number
+        })
+        return days;
+       })
+    }
   }
 })
 

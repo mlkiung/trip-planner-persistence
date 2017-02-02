@@ -28,8 +28,8 @@ var dayModule = (function () {
   // ~~~~~~~~~~~~~~~~~~~~~~~
   function Day (data) {
     // for brand-new days
-    this.number = data.day;
-    this.hotel = data.hotelId;
+    this.number = 0;
+    this.hotel = null;
     this.restaurants = [];
     this.activities = [];
     // for days based on existing data
@@ -97,11 +97,14 @@ var dayModule = (function () {
     // es6 template literals might be helpful for the url route path for your AJAX request
   // ~~~~~~~~~~~~~~~~~~~~~~~
   Day.prototype.addAttraction = function (attraction) {
-    // adding to the day object
+    // adding to the day object, and saving to db
     switch (attraction.type) {
       case 'hotel':
-        if (this.hotel) this.hotel.hide();
-        this.hotel = attraction;
+        $.post('/api/days/'+this.number+'/hotels/'+ attraction.id)
+          .then(function(result){
+            if (this.hotel) this.hotel.hide();
+            this.hotel = attraction;
+          }).catch(console.error)
         break;
       case 'restaurant':
         utilsModule.pushUnique(this.restaurants, attraction);
@@ -144,6 +147,9 @@ var dayModule = (function () {
 
     create: function (databaseDay) {
       return new Day(databaseDay);
+    },
+    loadEnhancedDays : function(collection){
+      return collection.map(dayModule.create)
     }
 
   };
