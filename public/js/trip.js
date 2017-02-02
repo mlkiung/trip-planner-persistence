@@ -104,9 +104,7 @@ var tripModule = (function () {
           if(!databaseDays.length){
             $(addDay)
           }else{
-            console.log("DB Days:", databaseDays)
             days = dayModule.loadEnhancedDays(databaseDays)
-            console.log("Enhanced Days:", days)
             switchTo(days[0])
           }
         }).catch(console.error)
