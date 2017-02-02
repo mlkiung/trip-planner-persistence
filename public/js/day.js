@@ -98,12 +98,13 @@ var dayModule = (function () {
   // ~~~~~~~~~~~~~~~~~~~~~~~
   Day.prototype.addAttraction = function (attraction) {
     // adding to the day object, and saving to db
+    var self = this;
     switch (attraction.type) {
       case 'hotel':
         if (this.hotel) this.hotel.hide();
         $.post('/api/days/' + this.number + '/hotels/' + attraction.id)
           .then(function (result) {
-            this.hotel = attraction;
+            self.hotel = attraction;
           }).catch(console.error);
         break;
       case 'restaurant':
@@ -125,23 +126,24 @@ var dayModule = (function () {
   // ~~~~~~~~~~~~~~~~~~~~~~~
   Day.prototype.removeAttraction = function (attraction) {
     // removing from the day object
+    var self = this;//a day
     switch (attraction.type) {
       case 'hotel':
         $.post('/api/days/' + this.number + '/hotels/remove/' + attraction.id)
           .then(function(result){
-            this.hotel = null;
+            self.hotel = null;
           }).catch(console.error);
         break;
       case 'restaurant':
         $.post('/api/days/' + this.number + '/restaurants/remove/' + attraction.id)
           .then(function(result){
-            utilsModule.remove(this.restaurants, attraction);
+            utilsModule.remove(self.restaurants, attraction);
           }).catch(console.error)
         break;
       case 'activity':
        $.post('/api/days/' + this.number + '/activities/remove/' + attraction.id)
           .then(function(result){
-            utilsModule.remove(this.activities, attraction);
+            utilsModule.remove(self.activities, attraction);
           }).catch(console.error)
 
         break;

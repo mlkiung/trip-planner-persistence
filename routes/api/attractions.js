@@ -9,7 +9,6 @@ const Place = require('../../models/place');
 router.get('/hotels', (req, res, next) => {
   Hotel.findAll()
     .then((hotels) =>{
-      console.log('hi in hotel route')
       res.json(hotels)
     }).catch(next)
 })
