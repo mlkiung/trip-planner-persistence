@@ -8,18 +8,21 @@ var Day = db.define('day', {
   number: {
     type: Sequelize.INTEGER
   }
-}, {
-  classMethods: {
-    findAndSort: function(){
-       return Day.findAll().then(function(days){
-        days = days.sort(function(a,b){
-          return a.number>b.number
-        })
-        return days;
-       })
-    }
-  }
-})
+} //{
+//   classMethods: {
+//     findAndSort: function(){
+//       return Day.findAll({
+//         include: [Hotel, Restaurant, Activity]
+//       }).then(function (days) {
+//          console.log(days);
+//         days = days.sort(function(a,b){
+//           return a.number>b.number
+//         })
+//         return days;
+//        })
+//     }
+  // }
+)
 
 Day.belongsTo(Hotel)
 Day.belongsToMany(Restaurant, {through: 'day_restaurant'});

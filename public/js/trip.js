@@ -81,17 +81,16 @@ var tripModule = (function () {
       newCurrent = days[index] || days[index - 1];
     //remove the deleted day from the DB
     $.ajax({
-      url:'/api/days/'+(index+1),
+      url: '/api/days/' + (index + 1),
       type: 'DELETE'
-    }).then(function(results){
+    }).then(function (results) {
       // fix the remaining day numbers
-      console.log('deleted!',results)
       days.forEach(function (day, i) {
         day.setNumber(i + 1);
-      })
+      });
       switchTo(newCurrent);
       previousDay.hideButton();
-    }).catch(console.error)
+    }).catch(console.error);
   }
 
   // globally accessible module methods

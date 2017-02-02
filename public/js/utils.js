@@ -17,9 +17,13 @@ var utilsModule = {
   },
 
   // pushes into array, but only if the item isn't already inside it
-  pushUnique: function (array, item) {
+  pushUnique: function (array, item, day, type) {
     if (array.indexOf(item) > -1) return;
-    return array.push(item);
+    $.post('/api/days/'+ day.number + type + item.id)
+      .then(function () {
+        return array.push(item);
+      })
+      .catch(console.error);
   },
 
   // removes a given item from an array if it's inside it
